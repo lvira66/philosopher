@@ -1,3 +1,15 @@
+#/* ************************************************************************** */
+#/*                                                                            */
+#/*                                                        :::      ::::::::   */
+#/*   Makefile                                           :+:      :+:    :+:   */
+#/*                                                    +:+ +:+         +:+     */
+#/*   By: lviravon <marvin@d42.fr>                   +#+  +:+       +#+        */
+#/*                                                +#+#+#+#+#+   +#+           */
+#/*   Created: 2025/08/07 22:59:41 by lviravon          #+#    #+#             */
+#/*   Updated: 2025/08/07 22:59:41 by lviravon         ###   ########.fr       */
+#/*                                                                            */
+#/* ************************************************************************** */
+
 NAME = philo
 CFLAGS = -Wall -Wextra -Werror -pthread -g
 
@@ -12,21 +24,20 @@ OBJ = $(patsubst $(DIR_SOURCE)/%.c, $(DIR_OBJ)/%.o, $(SRCS))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "Linking..."
 	@cc $(CFLAGS) -I $(DIR_HEADERS)  -o $@ $^
 
 $(DIR_OBJ)/%.o: $(DIR_SOURCE)/%.c $(DIR_HEADERS)/philo.h
 	$(shell mkdir -p $(dir $@))
 	@cc $(CFLAGS) -I $(DIR_HEADERS) -o $@ -c $<
-	@echo "Compiled "$<" successfully!"
+	@echo "Compile "$<""
 
 clean:
 	@rm -rf $(DIR_OBJ)
-	@echo "Object files removed!"
+	@echo "Supr objs"
 
 fclean: clean
 	@rm -f $(NAME)
-	@echo "Executable removed!"
+	@echo "CLEAR !"
 
 re: fclean all
 

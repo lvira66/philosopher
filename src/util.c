@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpires-n <lpires-n@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lviravon <marvin@d42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/25 21:31:14 by lpires-n          #+#    #+#             */
-/*   Updated: 2023/02/25 21:32:16 by lpires-n         ###   ########.fr       */
+/*   Created: 2025/08/07 22:55:29 by lviravon          #+#    #+#             */
+/*   Updated: 2025/08/08 03:31:14 by lviravon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
-int	strtoint(char *str)
+int	ft_atoi(char *str)
 {
-	int	number;
+	int	nbr;
 
-	number = 0;
+	nbr = 0;
 	while (*str == '+' || *str == '-')
 	{
 		if (*str == '-')
@@ -24,13 +24,13 @@ int	strtoint(char *str)
 		str++;
 	}
 	while (*str >= '0' && *str <= '9')
-		number = number * 10 + (*str++ - '0');
-	if (*str != '\0' || number > 2147483647)
+		nbr = nbr * 10 + (*str++ - '0');
+	if (*str != '\0' || nbr > 2147483647)
 		return (-1);
-	return (number);
+	return (nbr);
 }
 
-size_t	get_current(void)
+size_t	get_time(void)
 {
 	t_timeval	time;
 	size_t		time_current;
@@ -40,23 +40,23 @@ size_t	get_current(void)
 	return (time_current);
 }
 
-size_t	get_diff(size_t time_start)
+size_t	time_diff(size_t time_start)
 {
 	size_t	time_current;
 
-	time_current = get_current();
+	time_current = get_time();
 	return (time_current - time_start);
 }
 
-void	print_message(t_share *data, int id, char *message, int amounts)
+void	print_msg(t_data *data, int id, char *msg, int amounts)
 {
 	pthread_mutex_lock(&data->control_print);
-	if (get_someone_dead(data))
+	if (someone_is_dead(data))
 	{
 		pthread_mutex_unlock(&data->control_print);
 		return ;
 	}
 	while (amounts--)
-		printf("%zu \t %d \t %s \n", get_diff(data->number_start), id, message);
+		printf("%zu \t %d \t %s \n", time_diff(data->nbr_start), id, msg);
 	pthread_mutex_unlock(&data->control_print);
 }

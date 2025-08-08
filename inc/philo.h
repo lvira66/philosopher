@@ -3,42 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpires-n <lpires-n@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lviravon <marvin@d42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/25 21:30:44 by lpires-n          #+#    #+#             */
-/*   Updated: 2023/02/25 21:35:03 by lpires-n         ###   ########.fr       */
+/*   Created: 2025/08/08 01:56:52 by lviravon          #+#    #+#             */
+/*   Updated: 2025/08/08 01:56:52 by lviravon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-//------------------------------/
-//			LIBRARIES			/
-//------------------------------/
-# include <pthread.h>
 # include <stdio.h>
-# include <stdlib.h>
 # include <sys/time.h>
+# include <stdlib.h>
 # include <unistd.h>
+# include <pthread.h>
 
-//------------------------------/
-//			CONSTANTS			/
-//------------------------------/
-# define ERROR_ARGS "wrong number of arguments or invalid arguments\n"
-# define ERROR_THREAD "pthread_create failed\n"
-# define ERROR_JOIN "pthread_join failed\n"
-# define ERROR_MALLOC "malloc failed"
+# define FORK "has taken a fork 𐂐"
+# define EAT "is eating 😋"
+# define SLEEP "is sleeping 😴"
+# define THINK "is thinking 🤔"
+# define DIED "died 💀"
 
-# define FORK "has taken a fork"
-# define EAT "is eating"
-# define SLEEP "is sleeping"
-# define THINK "is thinking"
-# define DIED "died"
+enum
+{
+	TIME_DIE,
+	TIME_EAT,
+	TIME_SLEEP
+};
 
-//------------------------------/
-//			ENUMS				/
-//------------------------------/
 typedef enum e_bool
 {
 	FALSE,
@@ -47,67 +40,52 @@ typedef enum e_bool
 
 enum
 {
-	TIME_TO_DIE,
-	TIME_TO_EAT,
-	TIME_TO_SLEEP
+	L,
+	R
 };
 
-enum
-{
-	LEFT,
-	RIGHT
-};
-
-//------------------------------/
-//			STRUCTURES			/
-//------------------------------/
 typedef struct timeval	t_timeval;
 
 typedef struct s_data
 {
-	size_t				times[3];
-	int					number_eat;
-	int					number_philo;
-	size_t				number_start;
+	int					nbr_eat;
 	t_bool				someone_dead;
+	int					nbr_philo;
+	size_t				nbr_start;
 	pthread_mutex_t		control_print;
-	pthread_mutex_t		*forks;
 	pthread_mutex_t		control;
-}						t_share;
+	size_t				times[3];
+	pthread_mutex_t		*forks;
+}						t_data;
 
-typedef struct s_philo
+typedef struct s_philos
 {
-	int					id;
-	int					number_eat;
-	size_t				last_meal_time;
+	int					nbr_eat;
+	size_t				last_eat_time;
 	pthread_t			thread;
-	t_share				*data;
 	pthread_mutex_t		*forks[2];
-}						t_philo;
+	t_data				*data;
+	int					id;
+}						t_philos;
 
-//------------------------------/
-//			FUNCTIONS			/
-//------------------------------/
-size_t					get_current(void);
-size_t					get_diff(size_t time_start);
-void					my_usleep(size_t time);
+int						init_data(int argc, char **argv, t_data *data);
+void					destroy_all_data(t_data *data);
+int						create_trheads(t_philos *philo, pthread_t *monitor);
+int						joinning_threads(t_philos *philo, pthread_t *monitor);
+size_t					get_time(void);
 void					*dinner_philo(void *arg);
-void					print_message(t_share *data, int id, char *message, int amounts);
+void					set_data_nbr_eat(t_data *data);
+int						get_data_nbr_eat(t_data *data);
+t_bool					someone_is_dead(t_data *data);
+size_t					get_last_eat_time(t_philos *philo);
+void					print_msg(t_data *data, int id, char *msg,
+							int amounts);
+void					set_last_eat_time(t_philos *philo);
+void					set_nbr_eat(t_philos *philo);
+void					set_someone_dead(t_data *data);
+int						get_nbr_eat(t_philos *philo);
 void					*monitor_philo(void *arg);
-int						strtoint(char *str);
-int						init_share(int argc, char **argv, t_share *data);
-void					destroy_data(t_share *data);
-int						create_trhead(t_philo *philo, pthread_t *monitor);
-int						join_thread(t_philo *philo, pthread_t *monitor);
-
-void					set_last_meal_time(t_philo *philo);
-void					set_number_eat(t_philo *philo);
-void					set_someone_dead(t_share *data);
-void					set_data_number_eat(t_share *data);
-
-int						get_data_number_eat(t_share *data);
-t_bool					get_someone_dead(t_share *data);
-size_t					get_last_meal_time(t_philo *philo);
-int						get_number_eat(t_philo *philo);
+int						ft_atoi(char *str);
+size_t					time_diff(size_t time_start);
 
 #endif

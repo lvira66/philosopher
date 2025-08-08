@@ -1,41 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mutex_setter.c                                     :+:      :+:    :+:   */
+/*   get_info.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpires-n <lpires-n@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lviravon <marvin@d42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/25 21:31:08 by lpires-n          #+#    #+#             */
-/*   Updated: 2023/02/25 21:31:09 by lpires-n         ###   ########.fr       */
+/*   Created: 2025/08/07 22:55:16 by lviravon          #+#    #+#             */
+/*   Updated: 2025/08/08 03:31:02 by lviravon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
-void	set_last_meal_time(t_philo *philo)
+int	get_nbr_eat(t_philos *philo)
 {
+	int	yes_or_not;
+
 	pthread_mutex_lock(&philo->data->control);
-	philo->last_meal_time = get_current();
+	yes_or_not = philo->nbr_eat;
 	pthread_mutex_unlock(&philo->data->control);
+	return (yes_or_not);
 }
 
-void	set_number_eat(t_philo *philo)
+size_t	get_last_eat_time(t_philos *philo)
 {
+	size_t	yes_or_not;
+
 	pthread_mutex_lock(&philo->data->control);
-	philo->number_eat--;
+	yes_or_not = philo->last_eat_time;
 	pthread_mutex_unlock(&philo->data->control);
+	return (yes_or_not);
 }
 
-void	set_data_number_eat(t_share *data)
+int	get_data_nbr_eat(t_data *data)
 {
+	int	yes_or_not;
+
 	pthread_mutex_lock(&data->control);
-	data->number_eat--;
+	yes_or_not = data->nbr_eat;
 	pthread_mutex_unlock(&data->control);
+	return (yes_or_not);
 }
 
-void	set_someone_dead(t_share *data)
+t_bool	someone_is_dead(t_data *data)
 {
+	t_bool	yes_or_not;
+
 	pthread_mutex_lock(&data->control);
-	data->someone_dead = TRUE;
+	yes_or_not = data->someone_dead;
 	pthread_mutex_unlock(&data->control);
+	return (yes_or_not);
 }
